@@ -44,7 +44,7 @@ def StreamedTweets(file_name_json, sub_dir):
 
 			if os.path.exists(abs_file_name_json):
 				with open(file_name_pkl, 'wb') as f:
-					obj = TweetProgram(abs_file_path)
+					obj = TweetProgram(abs_file_name_json)
 					dill.dump(obj, f)
 					message = f"Created '{file_name_json}' stream to work on."
 			else:
@@ -143,8 +143,17 @@ class TweetProgram:
 
 	# load instance from local storage
 	def load_obj(self):
-		with open(self.obj_name, 'wb') as f:
+		with open(self.obj_name, 'rb') as f:
 			dill.load(self, f)
+
+	def reset_obj(self):
+		self.step_1_streamed_tweets_present = 1
+		self.step_2_cleaned_streamed_tweets = 0
+		self.step_3_fetched_full_tweets = 0
+		self.step_4_cleaned_full_tweets = 0
+		self.step_5_analyzed_full_tweets = 0
+
+		self.save_obj()
 
 	# Decorator and clean_tweets method. This method cleans & filters a json dict of tweets and returns both json and csv files of the tweets data. 
 	# Details: There 2 types of tweets data. One is the 'stream' data, which is the original, streamed data. Streamed data contains 5 fields related to each streamed tweet. These are mostly user fields and there are only 5 of them because streamed data is meant to be observed, not analyzed. The other is a 'full' data, which is fetched using the streamed data. Full data is defined as the: the most recent 20 tweets that are written by each author of the first hundred tweets in the streamed data. The full data is stored as a (json) dictionary and contains all fields related to every tweet.
@@ -206,8 +215,11 @@ class TweetProgram:
 		all_indices = [i for i in range(len(tweets))]
 		excluded_indices = []
 
-		# get median hashtag count
+		# get median hashtag count and also a list of hashtag counts
 		median, hashtag_counts = self._get_median_hashtags(tweets)
+
+		# get stdev of hashtag count
+		stdev = math.ceil(statistics.stdev(hashtag_counts))
 		
 		# if median is 0, then use mean
 		if median == 0:
@@ -227,9 +239,10 @@ class TweetProgram:
 		for i, values in enumerate(zip(tweets, hashtag_counts)):
 			tweet = values[0][3]
 			hashtag_count = values[1]
+			mid_68 = median + stdev
 
-			# exclude tweets that have profanity or a hashtag_count above the median/mean
-			if profanity.contains_profanity(tweet) == True or hashtag_count > median:
+			# exclude tweets that have profanity or a hashtag_count above the median + 1 stdev
+			if profanity.contains_profanity(tweet) == True or hashtag_count > mid_68:
 				excluded_indices.append(i)
 			else:
 				match = regex.search(tweet)
@@ -358,7 +371,7 @@ class TweetProgram:
 			user_tweets = []
 
 			try:
-				# search user timeline of top 100 users from streamed tweet data, and pull 20 tweets max for each user.
+				# search user timeline of top [max_users] users from streamed tweet data, and pull 20 tweets max for each user.
 				for tweet in tweepy.Cursor(api.user_timeline, user_id = user_id,  include_entities = True).items(self.max_tweets):
 					data = tweet._json
 
