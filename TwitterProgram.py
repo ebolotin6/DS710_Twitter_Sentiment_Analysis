@@ -454,7 +454,7 @@ class TweetProgram:
 		return(self.full_tweets_trunc_json)
 
 	@print_status
-	def get_sentiment(self):
+	def get_sentiment(self, use_cleaned_tweets = False):
 		# make sure that tweets have not already been analyzed
 		if self.step_5_analyzed_full_tweets != 1:
 			# make sure that tweets are full and cleaned
@@ -481,19 +481,22 @@ class TweetProgram:
 				full_tweets_index.append(tup)
 				index += 1
 
-		# open the filtered version of the full tweets list
-		with open(self.full_tweets_trunc_clean_json, 'r') as file:
-			filtered_tweets = json.load(file)
+		if use_cleaned_tweets == True:
+			# open the filtered version of the full tweets list
+			with open(self.full_tweets_trunc_clean_json, 'r') as file:
+				filtered_tweets = json.load(file)
 
-		# filter the full list of tweets
-		filtered_tweets = [full_tweets_index[tweet[0]-1] for tweet in filtered_tweets]
+			# filter the full list of tweets
+			tweets = [full_tweets_index[tweet[0]-1] for tweet in filtered_tweets]
+		else:
+			tweets = full_tweets_index
 
 		tweets_list = []
 		sid = SentimentIntensityAnalyzer() # create senitment analysis object
 		index = 0
 
 		# define fields that we want to pull from tweet data
-		for tweet in filtered_tweets:
+		for tweet in tweets:
 			tweet = tweet[1]
 			index += 1
 			user_id = tweet['user']['id']
@@ -642,7 +645,7 @@ def stream_tweets(query, option = 'user_info', file_name = 'user_ids', max_tweet
 
 		# Create new directory to store stream and sample data in.
 		while True:
-			sub_dir = "Sample_" + str(index)
+			sub_dir = "Experiment_" + str(index)
 			
 			if os.path.exists(sub_dir):
 				index += 1

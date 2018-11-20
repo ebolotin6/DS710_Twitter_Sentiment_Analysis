@@ -20,9 +20,10 @@ library(ggplot2)
 ```
 
 INSERT INTRO
+- INSERT definition of happiness
+- INSERT definition of samples
 INSERT assumptions about filters
 INSERT METHOD of collection (and quantity deduced)
-INSERT definition of happiness
 INSERT NULL HYPOTHESIS + A. HYPOTHESIS
 
 This data has been procured and cleaned in Python and is ready for analysis. We are only concerned with the sentiment scores produces by NLTK's VADER algorithm (and not those from TextBlob, which have also been computed in this data).
@@ -30,17 +31,14 @@ This data has been procured and cleaned in Python and is ready for analysis. We 
 ## First, let's read in data for both groups: tweets of people who talk about fitness and people who talk about media.
 
 ```{r, echo=FALSE}
-# change working dir
-setwd('Sample_1/')
+# IMPORTANT: change working dir
+setwd('Experiment_1/')
 
 # read in csvs of both sample groups
 group_1 <- read.csv("streamed_tweets_fitness_clean_full_analysis.csv", header=TRUE, sep=",")
 group_2 <- read.csv("streamed_tweets_media_clean_full_analysis.csv", header=TRUE, sep=",")
 
-excluded_users <- unique(excluded_users)
-
 ```
-
 ## Next, we need to two things. The first is to label each group. The second is to exclude users that appear in both groups.
 
 ```{r, echo=FALSE}
@@ -48,7 +46,6 @@ excluded_users <- unique(excluded_users)
 # Add column to both datasets to label each group
 group_1 = mutate(group_1, group = "fitness")
 group_2 = mutate(group_2, group = "media")
-len = nrow(group_1)
 
 # create list to exclude users that appear in both lists
 excluded_users <- list()
@@ -61,22 +58,47 @@ for(user_id in group_1$user_id) {
   }
 }
 
+excluded_users <- unique(excluded_users)
+
+group_1 <- group_1[!(group_1$user_id %in% excluded_users),]
+group_2 <- group_2[!(group_2$user_id %in% excluded_users),]
+
 ```
 
+## Next, we need to ensure that our sample sizes are the same for both groups. The problem is that these groups have different numbers of tweets, and thus the samples vary. But we need the sample size to be the same so that we can accurately gauge sentiment. To do this, we will generate random numbers specific to the index range of each group, and then take 5000 random indices of each group. These 5000 indices (randomly generated for each group) will constitute our sample size of 5000 tweets.
 
-## Next, we combine both groups into a single dataframe for analysis.
+```{r, echo=FALSE}
+
+# select sample sizes and possible ranges to generate indices
+n <- 5000
+group_1_index_range <- nrow(group_1)
+group_2_index_range <- nrow(group_2)
+
+# for group 1: generate indices of random sample
+set.seed(1)
+sample_indices_group_1 <- sample(1:group_1_index_range, n, replace = FALSE)
+sample_indices_group_1 <- sort(sample_indices_group_1)
+
+# for group 2: generate indices of random sample
+sample_indices_group_2 <- sample(1:group_2_index_range, n, replace = FALSE)
+sample_indices_group_2 <- sort(sample_indices_group_2)
+
+# select tweets by sample index
+group_1 <- group_1[sample_indices_group_1, c("group","sentiment_vader")]
+group_2 <- group_2[sample_indices_group_2, c("group","sentiment_vader")]
+
+```
+
+## Finally, we combine both groups into a single dataframe for analysis.
 
 ```{r, echo=FALSE}
 
 # combine groups into one dataframe
 combined_df = rbind(group_1, group_2)
 
-# remove users that belong to both groups
-combined_df <- combined_df[!(combined_df$user_id %in% excluded_users), c("group","sentiment_vader")]
-
 ```
 
-## With our data prepared - next we check out group sizes for this sample.
+## With our data prepared - we verify the group sizes for both samples.
 
 ```{r, echo=FALSE}
 group_size <- combined_df %>%
@@ -100,7 +122,7 @@ geom_boxplot(outlier.colour = "red", outlier.shape = 1) +
 
 ```
 
-The distributions of both groups are also quite similar. However, the fitness group has a higher interquartile range. This means that the fitness group has tweets with a higher sentiment than the media group. Another observation is that the first quartile (for both groups) ends nearly on the median. This tells us that a majority of the sentiments less than zero are very close to zero. Meaning, the spread is skewed towards a sentiment of zero.
+The distributions of both groups are also quite similar. However, the fitness group has a higher interquartile range. This means that the fitness group has tweets with a higher sentiment than the media group at the 3rd quartile. Another observation is that the first quartile (for both groups) ends nearly on the median. This tells us that a majority of the sentiments less than zero are very close to zero. Meaning, the spread is skewed towards a sentiment of zero.
 
 # However, the boxplot above does not give us much more information because the median for both groups is the same. Let's review summary statistics of both groups to get a sense of scale. 
 
@@ -119,7 +141,7 @@ summary_stats
 
 ```
 
-A few important details are available. As written before, we notice that the fitness group is nearly 70% bigger than the media group. Also: for the fitness group, ~85% of tweets are equal to or above 0 (neutral) sentiment. For the media group, this number is ~83.4%. The conclusion for both groups is that tweets are overwhelmingly neutral or positive in sentiment.
+We notice that for the fitness group, ~86% of tweets are equal to or above 0 (neutral) sentiment. For the media group, this number is ~85%. The conclusion for both groups is that tweets are overwhelmingly neutral and/or positive in sentiment.
 
 ## Next, let's visualize the distribution above. We can do this by plotting a density plot and histogram of the (VADER) sentiment scores to see the frequency of sentiments.
 ```{r, echo=FALSE}
@@ -130,16 +152,16 @@ qplot(sentiment_vader, data=combined_df, geom="density", fill=group, alpha=I(.5)
    ylab="Density")
 
 # Histogram
-ggplot(combined_df, aes(sentiment_vader, fill = group)) + 
-  geom_histogram() + ggtitle("Distribution of sentiment")
+ggplot(combined_df, aes(sentiment_vader, fill = group)) +
+  geom_histogram(position="identity", alpha = .5) + ggtitle("Distribution of sentiment")
 
 ```
 
 The density and histogram plots tell us a few things clearly:
 1. The sentiments for both groups do not quite follow a normal distribution **at this sample size**.
-1. Despite the large difference in group size, both groups have a very similar distribution of sentiments. Meaning, people in both groups tend to express themselves similarly in sentiment. 
+1. Both groups have a very similar distribution of sentiments. Meaning, people in both groups tend to express themselves similarly in sentiment. 
 2. Another insight is that the most common sentiment is neutral (equal to 0), or close to it.
-3. There are more positive sentiments (greater than 0) than there are negative sentiments.
+3. There are **more** positive sentiments (greater than 0) than there are negative sentiments.
 4. The fitness group has a higher frequency of positive sentiments than the media group.
 
 ## Given the density distribution, let's check if both samples follow a normal distribution:
@@ -159,7 +181,7 @@ qqnorm(media_group, pch = 1, frame = FALSE)
 qqline(media_group, col = "blue", lwd = 2)
 
 ```
-The Q-Q plot confirms that the sentiment from our sample groups does not follow a normal distribution. This means that parametric statistics tests such as the T-Test may not be ideally suited to determine if one group is statistically different from another. This is because parametric statistics tests make assumptions about "about the parameters (defining properties) of the population distribution from which one's data are drawn" [1]. This means that because we cannot assume the data to be symmetrical about the mean (or equal variance, among other differences), it is probably not ideal to depend on these parametric tests.
+The Q-Q plot confirms that the sentiment from our sample groups does not follow a normal distribution. This means that parametric statistics tests such as the T-Test may not be ideally suited to determine if one group is statistically different from another. This is because parametric statistics tests make assumptions about "about the parameters (defining properties) of the population distribution from which one's data are drawn" [1]. Because we cannot assume the data to be symmetrical about the mean (or equal variance, among other differences), it is probably not ideal to depend on these parametric tests.
 
 [1] Parametric vs Non-parametric, http://vassarstats.net/textbook/parametric.html
 
@@ -195,7 +217,7 @@ t.test
 
 The T-test confirms that the mean's of both groups are statistically significant. This would suggest that we can reject the null hypothesis that people that talk about fitness are equally happy as people that talk about media. 
 
-However, can we trust this test given that we have very small sample sizes and the data does not follow a standard normal distribution?
+However, can we trust this test given that our small sample sizes and the fact that the data does not follow a standard normal distribution?
 
 ## To find out how reliable this conclusion is, let's run the Mann-Whitney U test (also known as the Wilcox test). It is a nonparametric of the null hypothesis designed to account for non-normal distributions.
 

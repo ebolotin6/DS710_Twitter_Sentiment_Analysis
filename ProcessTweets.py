@@ -12,11 +12,11 @@ from TwitterProgram import StreamedTweets, TweetProgram
 
 # ### step 1 stream tweets
 # ### step 2 instantiate object and clean tweets
-# group_1 = StreamedTweets("streamed_tweets_media.json", sub_dir="Sample_1")
+# group_1 = StreamedTweets("streamed_tweets_media.json", sub_dir="Experiment_2")
 # group_1.clean_tweets()
 
 # ### step 3: fetch other tweets
-# group_1.get_full_tweets(max_users = 1000)
+# group_1.get_full_tweets(max_users = 2000)
 
 # ### step 4: clean the fetched tweets
 # group_1.clean_tweets(tweets_type = "full")
@@ -28,11 +28,11 @@ from TwitterProgram import StreamedTweets, TweetProgram
 
 ### step 1 stream tweets
 ### step 2 instantiate object and clean tweets
-group_2 = StreamedTweets("streamed_tweets_fitness.json", sub_dir="Sample_1")
+group_2 = StreamedTweets("streamed_tweets_fitness.json", sub_dir="Experiment_2")
 group_2.clean_tweets()
 
 ### step 3: fetch other tweets
-group_2.get_full_tweets(max_users = 1000)
+group_2.get_full_tweets(max_users = 2000)
 
 ### step 4: clean the fetched tweets
 group_2.clean_tweets(tweets_type = "full")
