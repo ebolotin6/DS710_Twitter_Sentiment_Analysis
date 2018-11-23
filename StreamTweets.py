@@ -20,7 +20,7 @@ keywords_f = keywords_f1 + keywords_f2
 ########################
 
 ### step 1: media group
-file_name_m = stream_tweets(keywords_m, option = 'user_info', file_name = 'streamed_tweets_media', max_tweets = 5000)
+# file_name_m = stream_tweets(keywords_m, option = 'user_info', file_name = 'streamed_tweets_media', max_tweets = 5000)
 
 ### step 1: athletic group
 file_name_a = stream_tweets(keywords_f, option = 'user_info', file_name = 'streamed_tweets_fitness', max_tweets = 5000)

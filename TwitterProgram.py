@@ -416,8 +416,9 @@ class TweetProgram:
 		
 		# for readability, create a truncated version of the full json file in both json and csv format.
 		try:
+			len_tweets = len(all_tweets)
 			output_filename_json = self._truncate_and_transform(self.full_tweets_json)
-			print(f"Successfully collected {self.max_tweets} tweets per {self.max_users} users. See csv: '{os.path.relpath(self.full_tweets_trunc_csv)}'")
+			print(f"Successfully collected {len_tweets} tweets. See csv: '{os.path.relpath(self.full_tweets_trunc_csv)}'")
 			return(output_filename_json)
 
 		except Exception as e:
