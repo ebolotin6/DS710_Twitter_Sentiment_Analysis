@@ -15,10 +15,10 @@ This experiment aims to answer the question:
   
 - Are people that are vocal about their physical activity happier than people who are vocal about their media consumption? The same question phrased differently: are people that talk about fitness happier than people who talk about media (tv, movies, internet videos, etc.)?
 
-  - **Null hypothesis**: the happiness of people that talk about fitness is not different from the happiness of people that talk about media.
-  - **Alternate hypothesis**: the happiness of people that talk about fitness is (statistically) different from the happiness of people that talk about media.
+  - **Null hypothesis**: the happiness of people that talk about fitness is equal to (not different from) the happiness of people that talk about media.
+  - **Alternate hypothesis**: the happiness of people that talk about fitness is greater than the happiness of people that talk about media.
 
-To answer this question, we have performed sentiment analysis on Twitter data. Two sample groups have been collected (using Python and Twitter's API), cleaned, and sentiment calculated using the methdology described in the project summary. These sample groups of tweets are stored in distinct CSV files. They are ready to be read-into R. Let's begin the statistical analysis.
+To answer this question, sentiment analysis using Twitter data is performed. Two sample groups have been collected (using Python and Twitter's API), cleaned, and sentiment calculated using the methdology described in the project summary. These sample groups of tweets are stored in distinct CSV files. They are ready to be read-into R. Let's begin the statistical analysis.
 
 ## Load libraries
 First, load necessary libraries for analysis.
@@ -37,7 +37,7 @@ Read in data for both groups: tweets of people who talk about fitness and people
 
 ```{r echo=TRUE}
 # IMPORTANT: change working dir
-setwd('Samples_Round_2/')
+setwd('Twitter_Sentiment_Analyzer/Samples_Round_2/')
 
 # Read in csvs of both sample groups
 group_1 <- read.csv("streamed_tweets_fitness_clean_full_analysis.csv", header=TRUE, sep=",")
@@ -156,12 +156,12 @@ summary_stats
 
 ```
 
-We notice that for the fitness group, ~89% of tweets are equal to or above 0 (neutral) sentiment. For the media group, this number is ~84%. The conclusion for both groups is that tweets are overwhelmingly neutral and/or positive in sentiment.
+We notice that for the fitness group, ~88% of tweets are equal to or above 0 (neutral) sentiment. For the media group, this number is ~85%. The conclusion for both groups is that tweets are overwhelmingly neutral and/or positive in sentiment.
 
 ## 8. Density plot and histogram
 Next, let's visualize the distribution above. We can do this by plotting a density plot and histogram of the (VADER) sentiment scores to see the frequency of sentiments.
 
-```{r echo=TRUE, warning=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 
 # Density plots
 qplot(sentiment_vader, data=combined_df, geom="density", fill=group, alpha=I(.5), 

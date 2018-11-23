@@ -37,7 +37,7 @@ Read in data for both groups: tweets of people who talk about fitness and people
 
 ```{r echo=TRUE}
 # IMPORTANT: change working dir
-setwd('Samples_Round_1/')
+setwd('Twitter_Sentiment_Analyzer/Samples_Round_1/')
 
 # Read in csvs of both sample groups
 group_1 <- read.csv("streamed_tweets_fitness_clean_full_analysis.csv", header=TRUE, sep=",")

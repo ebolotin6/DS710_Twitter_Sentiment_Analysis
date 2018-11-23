@@ -13,7 +13,7 @@ This is project seeks to answer the question:
 2. Twitter_Sentiment_Analysis.pdf - Statistics analysis (R markdown PDF)
 3. Twitter_Sentiment_Analyzer - directory containing the program code used to complete the project
 
-### Directions -
+### Viewing directions -
 
 1. Read the project summary to learn about the project.
 2. Review the Twitter_Sentiment_Analysis.pdf to review statistical analysis.
