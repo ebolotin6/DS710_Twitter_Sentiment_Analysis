@@ -7,6 +7,12 @@ This is project seeks to answer the question:
 * Are people that talk about fitness happier than people that talk about media (tv, movies, youtube, etc.)?
 * Data source: Twitter data
 
+### Viewing directions -
+
+1. Read the project summary to learn about the project.
+2. Review the Twitter_Sentiment_Analysis.pdf to review statistical analysis.
+3. Open the TSA folder to review and understand the code. Start with the README.
+
 ### Directory contents -
 
 * **Project_Summary.pdf** - summarizes the project
@@ -17,7 +23,11 @@ This is project seeks to answer the question:
 * **Samples_Round_1** - sample data, round 1
 * **Samples_Round_2** - sample data, round 2
 
-### Naming convention of sample data
+### Link to program -
+
+[Twitter Sentiment Analyzer](https://github.com/ebolotin6/Twitter_Sentiment_Analyzer/ "Twitter Sentiment Analyzer") - This project is created entirely with this purpose-built program.
+
+### Naming convention of sample data -
 
 1. Say that created a stream of tweets for a group called "media". You gave your stream the name of 'streamed_tweets_media'. As a result, the stream file name would be:
 	- 'streamed_tweets_media.json'
@@ -32,16 +42,6 @@ This is project seeks to answer the question:
 
 4. Finally, create the sentiment analysis for the tweets. Output file:
 	- 'streamed_tweets_media_clean_full_analysis.csv' (import this into R.)
-
-### Link to program
-
-[Twitter Sentiment Analyzer](https://github.com/ebolotin6/Twitter_Sentiment_Analyzer/ "Twitter Sentiment Analyzer") - This project is created entirely with this purpose-built program.
-
-### Viewing directions -
-
-1. Read the project summary to learn about the project.
-2. Review the Twitter_Sentiment_Analysis.pdf to review statistical analysis.
-3. Open the TSA folder to review and understand the code. Start with the README.
 
 
 Copyright 2018, All Rights Reserved.
