@@ -11,7 +11,7 @@ This is project seeks to answer the question:
 
 1. Read the **Project_Summary.pdf** to learn about the project.
 2. Review the **Twitter_Sentiment_Analysis.pdf** to review statistical analysis.
-3. Check out [**Twitter_Sentiment_Analyzer**](https://github.com/ebolotin6/Twitter_Sentiment_Analyzer) folder to review and understand the code. Start with the README.
+3. Check out [**Twitter_Sentiment_Analyzer**](https://github.com/ebolotin6/Twitter_Sentiment_Analyzer) to review project code.
 
 ### Project (directory) contents -
 
@@ -20,8 +20,8 @@ This is project seeks to answer the question:
 	- Twitter_Sentiment_Analysis.Rmd - R Markdown
 * **Twitter_Sentiment_Analysis_Exp_2.pdf** - Statistics analysis, (sample set 2)
 	- Twitter_Sentiment_Analysis_Exp_2.Rmd - R Markdown
-* **./Samples_Round_1/** - sample data (set 1)
-* **./Samples_Round_2/** - sample data (set 2)
+* **/Samples_Round_1/** - sample data (set 1)
+* **/Samples_Round_2/** - sample data (set 2)
 
 ### Link to program -
 
