@@ -32,12 +32,12 @@ This is project seeks to answer the question:
 1. Say that you created a stream of tweets for a group called "media". You gave your stream the name of '*streamed_tweets_media*'. As a result, the stream file name would be:
 	- '*streamed_tweets_media.**json***'
 
-2. Then, clean this stream using the TSA program in the next section. The newly created file would have an "clean" appended to it. New file:
+2. Then, clean this stream using the [TSA Program](https://github.com/ebolotin6/Twitter_Sentiment_Analyzer/ "Twitter Sentiment Analyzer"). The newly created file would have "clean" appended to it:
 	- '*streamed_tweets_media_clean.**csv***'
 
-3. Next, fetch non-filtered tweets for this stream. Three files are created:
+3. Next, fetch non-filtered tweets for the cleaned stream. Three files are created:
 	- '*streamed_tweets_clean_full.**json***' (this is the full data in json format)
-	- '*streamed_tweets_clean_full_trunc.**csv***' (same data but limited columns for readability's sake)
+	- '*streamed_tweets_clean_full_trunc.**csv***' (full data with limited columns for readability)
 	- '*streamed_tweets_clean_full_trunc.**json***' (same as the csv above but in json format)
 
 4. Finally, create the sentiment analysis for the tweets. Output file:
